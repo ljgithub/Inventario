@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,7 @@ import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity{
 
-    String baseDatos = "kcatkipg";
+
 
     Button guardar = null;
     EditText nombreProducto = null;
@@ -62,48 +63,22 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public boolean guardarProducto(View v){
-        //boolean res = conectarAMySql();
-
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                String ip = "rajje.db.elephantsql.com";
-                String puerto = "3306";
-                String user= "kcatkipg";
-                String password = "rBJJrCOygZBKni0U74j6B5w9Xvbhr9pv";
-
-                boolean estadoConeccion = false;
-                String driver = "org.postgresql.Driver";
-
-                String urlMySQL = "jdbc:postgresql://" + ip + ":" + puerto + "/";
-
-                Connection conexionMySql = null;
-
-                try {
-                    Class.forName(driver).newInstance();
-                    conexionMySql = DriverManager.getConnection(urlMySQL + baseDatos  ,  user, password);
-
-                    if (!conexionMySql.isClosed()){
-                        estadoConeccion = true;
-                        Toast.makeText(getApplicationContext(), "Conexion Establecida", Toast.LENGTH_LONG).show();
-                    }
-                }catch (Exception ex){
-                    Toast.makeText(getApplicationContext(), "No se pudo establecer la conexión!!!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
+        conectarAMySql();
 
         return true;
     }
 
-    public boolean conectarAMySql() {
+    boolean conectarAMySql() {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         String ip = "rajje.db.elephantsql.com";
-        String puerto = "3306";
-        String user= "kcatkipg";
-        String password = "rBJJrCOygZBKni0U74j6B5w9Xvbhr9pv";
+        String puerto = "5432";
+        String user= "kmkcmfcd";
+        String password = "I5u5omGjZUqctQ3VB6yPAn7poOnw92l-";
+
+        String baseDatos = "kmkcmfcd";
 
         boolean estadoConeccion = false;
         String driver = "org.postgresql.Driver";
