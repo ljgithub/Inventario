@@ -2,6 +2,7 @@ package com.uisrael.inventario;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import java.sql.Connection;
 import  java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,53 +56,43 @@ public class MainActivity extends AppCompatActivity{
         costoProd = costoProducto.getText().toString();
 
 
+        /**
+         *  Inicializamos conexión con base de datos
+         *
+         */
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guardarProducto(v);
+                makeConnection(v);
+                try {
+                    ejecutarPeticion();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
     }
 
-    public boolean guardarProducto(View v){
-        conectarAMySql();
+    private void ejecutarPeticion() throws SQLException {
+        String statement = "insert into zona (idzona, descripcion, estadozona) values (6,'Bodega Norte-Carcelen','1')";
+        Connection conn = DriverManager.getConnection("jdbc:postgresql://35.192.200.171:5432/inventarioUisrael","postgres","postgres");
 
-        return true;
+        Statement st = conn.createStatement();
+        st.execute(statement);
     }
 
-    boolean conectarAMySql() {
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        String ip = "rajje.db.elephantsql.com";
-        String puerto = "5432";
-        String user= "kmkcmfcd";
-        String password = "I5u5omGjZUqctQ3VB6yPAn7poOnw92l-";
-
-        String baseDatos = "kmkcmfcd";
-
-        boolean estadoConeccion = false;
-        String driver = "org.postgresql.Driver";
-
-        String urlMySQL = "jdbc:postgresql://" + ip + ":" + puerto + "/";
-
-        Connection conexionMySql = null;
-
+    public boolean makeConnection(View v){
+        boolean response;
         try {
-            Class.forName(driver).newInstance();
-            conexionMySql = DriverManager.getConnection(urlMySQL + baseDatos  ,  user, password);
-
-            if (!conexionMySql.isClosed()){
-                estadoConeccion = true;
-                Toast.makeText(getApplicationContext(), "Conexion Establecida", Toast.LENGTH_LONG).show();
-            }
+            ConnectionsBD con = new ConnectionsBD();
+            con.doInBackground();
+            Toast.makeText(getApplicationContext(), "Conexión Establecida", Toast.LENGTH_LONG).show();
+            response = true;
         }catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "No se pudo establecer la conexión!!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Falló al establecer la conexión", Toast.LENGTH_LONG).show();
+            response = false;
         }
-
-        return  estadoConeccion;
-
+        return response;
     }
 }
