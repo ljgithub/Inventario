@@ -1,9 +1,9 @@
-package com.uisrael.inventario;
+package com.uisrael.inventario.Dao;
 
-import android.app.Application;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import android.widget.Toast;
+
+import com.uisrael.inventario.MainActivity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

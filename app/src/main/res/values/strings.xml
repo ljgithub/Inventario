@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">Inventario</string>
+    <string name="app_name">Semana 5</string>
+    <string name="descripcionFuncNotas">Responda la Encuesta a continuación</string>
+
+    <string name="data_1">Cree que la educación es importante en nuestro país?</string>
+    <string name="data_2">Ha cambiado la educación en los últimos años?</string>
+    <string name="data_3">Esta de acuerdo con los cambios que se han implementado?</string>
+    <string name="data_4">Que tipo de escuela escogería para sus hijos</string>
+    <string name="data_5">Que alimentos le gustaría que formasen parte del lunch escolar</string>
+    <string name="data_6">Nota Parcial 2</string>
+    <string name="data_7">Nota Final</string>
+    <string name="verificar">Enviar</string>
+    <string name="nota">Contesta todas las preguntas</string>
+    <string name="resultado">Resultado</string>
 </resources>

@@ -1,25 +1,22 @@
 package com.uisrael.inventario;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.uisrael.inventario.modelo.Dao.Impl.GenericaDaoImpl;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Parametros para conexión con base de datos
- *
  */
-
-import java.sql.Connection;
-import  java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity{
         guardar = findViewById(R.id.btnGuardar);
         nombreProducto = findViewById(R.id.edtNombre);
         marcaProducto = findViewById(R.id.edtMarca);
-        proveedorProducto= findViewById(R.id.edtProveedor);
+        proveedorProducto = findViewById(R.id.edtProveedor);
         costoProducto = findViewById(R.id.edtCosto);
 
         nombreProd = nombreProducto.getText().toString();
@@ -55,11 +52,47 @@ public class MainActivity extends AppCompatActivity{
         proveedorProd = proveedorProducto.getText().toString();
         costoProd = costoProducto.getText().toString();
 
+        try {
+            ejecutarPeticion();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void ejecutarPeticion() throws SQLException {
+        String statement = "insert into zona (idzona, descripcion, estadozona) values (6,'Bodega Norte-Carcelen','1')";
+        Connection conn = null;
+
+        GenericaDaoImpl genericaDaoImpl = new GenericaDaoImpl();
+        conn = genericaDaoImpl.conectar();
+
+        DriverManager.getConnection("jdbc:postgresql://35.192.200.171:5432/inventarioUisrael","postgres","postgres");
+
+        Statement st = conn.createStatement();
+        st.execute(statement);
+    }
+
+    /*
+    public boolean makeConnection(View v){
+        boolean response;
+        try {
+            ConnectionsBD con = new ConnectionsBD();
+            con.co();
+            Toast.makeText(getApplicationContext(), "Conexión Establecida", Toast.LENGTH_LONG).show();
+            response = true;
+        }catch (Exception ex){
+            Toast.makeText(getApplicationContext(), "Falló al establecer la conexión", Toast.LENGTH_LONG).show();
+            response = false;
+        }
+        return response;
+    }*/
 
         /**
          *  Inicializamos conexión con base de datos
          *
          */
+        /*
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,29 +103,7 @@ public class MainActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
 
-    }
 
-    private void ejecutarPeticion() throws SQLException {
-        String statement = "insert into zona (idzona, descripcion, estadozona) values (6,'Bodega Norte-Carcelen','1')";
-        Connection conn = DriverManager.getConnection("jdbc:postgresql://35.192.200.171:5432/inventarioUisrael","postgres","postgres");
-
-        Statement st = conn.createStatement();
-        st.execute(statement);
-    }
-
-    public boolean makeConnection(View v){
-        boolean response;
-        try {
-            ConnectionsBD con = new ConnectionsBD();
-            con.doInBackground();
-            Toast.makeText(getApplicationContext(), "Conexión Establecida", Toast.LENGTH_LONG).show();
-            response = true;
-        }catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "Falló al establecer la conexión", Toast.LENGTH_LONG).show();
-            response = false;
-        }
-        return response;
-    }
 }
